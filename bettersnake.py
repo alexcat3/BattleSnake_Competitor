@@ -21,7 +21,7 @@ MAX_SIDE_LOOK = 5
 
 #Number of empty squares in a direction at which point the snake stops looking for
 #free space and starts chasing food 
-MIN_AREA = 5 
+MIN_AREA = 7
 #Number of moves that the code tries to predict for other snakes
 #  (it simply predicts that they continue to go in the same direction)
 PREDICTION_DIST =3 
@@ -143,13 +143,11 @@ def exploreDirection(direction: Dir, snake: typing.Dict, board_array: npt.NDArra
                 if inBounds(newLoc,board_array): nextLocations.add(tuple(newLoc))
                 #We don't want to double back on ourselves in the perpendicular direction so
                 #we only add the perpendicular vector with the same sign as our
-                #initial perpendicular displacement
-                if(np.abs(np.dot(location-position, perpVec)) < MAX_SIDE_LOOK):
-                    print(np.abs(np.dot(location-position, perpVec)))
-                    if np.dot(location-position, perpVec) >=0 and inBounds(location+perpVec,board_array):
-                        nextLocations.add(tuple(location + perpVec))
-                    if np.dot(location-position,perpVec) <=0 and inBounds(location-perpVec,board_array):
-                        nextLocations.add(tuple(location-perpVec))
+                #initial perpendicular displacemen
+                if np.dot(location-position, perpVec) >=0 and inBounds(location+perpVec,board_array):
+                    nextLocations.add(tuple(location + perpVec))
+                if np.dot(location-position,perpVec) <=0 and inBounds(location-perpVec,board_array):
+                    nextLocations.add(tuple(location-perpVec))
             #If our head will arrive at the square at the same time as the head of another snake
             elif(square[0] == BoardSquare.SNAKE_PROJECTION.value and square[2]==i and snakeHeadCollision == None):
                 #Record that snake
@@ -178,10 +176,11 @@ def move(game_state: typing.Dict) -> typing.Dict:
     safeDirections = [d for d in Dir if (DirectionVectors[d] != currentDirection*-1).any()]
     for direction in safeDirections:
         info = exploreDirection(direction, my_snake, board_array)
-        #If we can eat another snake, move toward its head
+        #If we can eat another snake, and there is decent space around it move toward its head
         if (info['snakeHeadCollision'] != None and 
-                len(snake_list[info['snakeHeadCollision']['id']]['body']) < len(my_snake['body']) and
-                (snakeHeadCollision == None or snakeHeadCollision['dist'] > info['snakeHeadCollison']['dist'])):
+                len(snake_list[info['snakeHeadCollision']['id']]['body']) < len(my_snake['body'])-1 and
+                (snakeHeadCollision == None or snakeHeadCollision['dist'] > info['snakeHeadCollison']['dist'])
+                and info['area'] > 5):
             moveDirection = direction
             snakeHeadCollision = info['snakeHeadCollision']
         #If we are below the minimum open area try to move in a direction with more open spaces
