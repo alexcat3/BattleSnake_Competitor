@@ -144,7 +144,7 @@ def exploreDirection(direction: Dir, snake: typing.Dict, board_array: npt.NDArra
                 #We don't want to double back on ourselves in the perpendicular direction so
                 #we only add the perpendicular vector with the same sign as our
                 #initial perpendicular displacement
-                if(math.abs(np.dot(location-position, perpVec)) < MAX_SIDE_LOOK):
+                if(np.abs(np.dot(location-position, perpVec)) < MAX_SIDE_LOOK):
                     if np.dot(location-position, perpVec) >=0 and inBounds(location+perpVec,board_array):
                         nextLocations.add(tuple(location + perpVec))
                     if np.dot(location-position,perpVec) <=0 and inBounds(location-perpVec,board_array):
