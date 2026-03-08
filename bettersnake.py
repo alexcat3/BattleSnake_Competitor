@@ -17,7 +17,7 @@ import numpy.typing as npt
 from enum import Enum
 #Perimeter of the area that the snake looks at when determining where to go
 LOOKAHEAD_DIST = 5
-MAX_SIDE_LOOK = 3
+MAX_SIDE_LOOK = 5
 
 #Number of empty squares in a direction at which point the snake stops looking for
 #free space and starts chasing food 
@@ -145,6 +145,7 @@ def exploreDirection(direction: Dir, snake: typing.Dict, board_array: npt.NDArra
                 #we only add the perpendicular vector with the same sign as our
                 #initial perpendicular displacement
                 if(np.abs(np.dot(location-position, perpVec)) < MAX_SIDE_LOOK):
+                    print(np.abs(np.dot(location-position, perpVec)))
                     if np.dot(location-position, perpVec) >=0 and inBounds(location+perpVec,board_array):
                         nextLocations.add(tuple(location + perpVec))
                     if np.dot(location-position,perpVec) <=0 and inBounds(location-perpVec,board_array):
