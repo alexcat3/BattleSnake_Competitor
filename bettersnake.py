@@ -131,7 +131,7 @@ def exploreDirection(direction: Dir, snake: typing.Dict, board_array: npt.NDArra
             location = np.array(locationTuple)
             square = board_array[location[0],location[1]]
             #if this point  will not be occupied by a deadly snake when we arrive
-            if ((square[0] != BoardSquare.SNAKE.value or square[2] < i-1)
+            if ((square[0] != BoardSquare.SNAKE.value or square[2] < i-2)
                     and (square[0] != BoardSquare.SNAKE_PROJECTION.value or square[2]>i)):
                 #if this point is food, update distance to food
                 if square[0] == BoardSquare.FOOD.value:
